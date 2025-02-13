@@ -2,7 +2,7 @@
 
 rm /etc/apache2/sites-enabled/000-default.conf
 
-ln -s ${WORKDIR}/instalacion/toba.conf /etc/apache2/sites-enabled/toba.conf
+ln -s /data/scripts/mapuche.conf /etc/apache2/sites-enabled/mapuche.conf
 
 a2enmod rewrite
 /usr/sbin/apachectl -DFOREGROUND
