@@ -39,8 +39,8 @@ RUN mkdir -p /usr/local/src \
     && rm /usr/local/src/securimage.zip
 
 # Crear directorio de trabajo y asignar permisos
-RUN mkdir -p /data/local \
-    && chown -R www-data:www-data /data/local
+RUN mkdir -p /data \
+    && chown -R www-data:www-data /data
 
 # Cambiar UID de Apache
 RUN sed -i -e 's/:33:33:/:1000:1000:/' -e 's/:33/:1000/' /etc/passwd \
@@ -58,7 +58,7 @@ RUN chmod +x /entrypoint-dir/start.sh
 EXPOSE 80
 
 # Establecer el directorio de trabajo
-WORKDIR /data/local
+WORKDIR /data
 
 # Definir el punto de entrada
 ENTRYPOINT ["/entrypoint-dir/start.sh"]
