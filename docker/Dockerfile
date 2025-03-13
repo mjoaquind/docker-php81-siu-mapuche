@@ -7,11 +7,13 @@ RUN a2enmod rewrite
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libxml2-dev libpq-dev libzip-dev mc zip unzip git curl gnupg \
     libxslt1-dev libfreetype6-dev libjpeg62-turbo-dev libpng-dev \
+    libonig-dev \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_pgsql pgsql zip soap bcmath calendar xsl gd \
+    && docker-php-ext-install pdo pdo_pgsql pgsql zip soap bcmath calendar xsl gd mbstring \
     && docker-php-ext-enable xsl \
     && rm -rf /var/lib/apt/lists/*
+
 
 # Instalar Node.js y Yarn usando Corepack
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
