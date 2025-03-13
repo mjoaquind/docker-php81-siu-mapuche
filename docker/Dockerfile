@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_pgsql pgsql zip soap bcmath calendar xsl gd mbstring \
-    && docker-php-ext-enable xsl \
+    && pecl install dbase \
+    && docker-php-ext-enable xsl dbase \
     && rm -rf /var/lib/apt/lists/*
 
 
