@@ -41,17 +41,18 @@ RUN mkdir -p /usr/local/src \
     && unzip /usr/local/src/securimage.zip -d /var/www/securimage \
     && rm /usr/local/src/securimage.zip
 
-# Crear directorio de trabajo y asignar permisos
-RUN mkdir -p /data \
+# Crear directorios y asignar permisos
+RUN mkdir -p /data /data/log \
     && chown -R www-data:www-data /data
 
 # Cambiar UID de Apache
 RUN sed -i -e 's/:33:33:/:1000:1000:/' -e 's/:33/:1000/' /etc/passwd \
     && sed -i -e 's/:33/:1000/' /etc/group
 
-# Configuración de logs de Apache
-RUN sed -i -e 's|/proc/self/fd/1|/var/log/apache2/access.log|' \
-           -e 's|/proc/self/fd/2|/proc/self/fd/1|' /etc/apache2/apache2.conf
+# Configuración de logs de Apache para guardar en /data/log
+RUN sed -i -e 's|ErrorLog ${APACHE_LOG_DIR}/error.log|ErrorLog /data/log/mapuche-error.log|' \
+           -e 's|CustomLog ${APACHE_LOG_DIR}/access.log combined|CustomLog /data/log/mapuche-access.log combined|' \
+           /etc/apache2/sites-available/000-default.conf
 
 # Copiar y dar permisos al script de entrada
 COPY start.sh /entrypoint-dir/start.sh
