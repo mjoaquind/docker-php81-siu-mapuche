@@ -15,7 +15,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && docker-php-ext-enable xsl dbase \
     && rm -rf /var/lib/apt/lists/*
 
-
 # Instalar Node.js y Yarn usando Corepack
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
@@ -42,8 +41,10 @@ RUN mkdir -p /usr/local/src \
     && rm /usr/local/src/securimage.zip
 
 # Crear directorios y asignar permisos
-RUN mkdir -p /data /data/log \
-    && chown -R www-data:www-data /data
+RUN mkdir -p /data/log \
+    && touch /data/log/mapuche-error.log /data/log/mapuche-access.log \
+    && chown -R www-data:www-data /data \
+    && chmod -R 755 /data/log
 
 # Cambiar UID de Apache
 RUN sed -i -e 's/:33:33:/:1000:1000:/' -e 's/:33/:1000/' /etc/passwd \
@@ -53,6 +54,10 @@ RUN sed -i -e 's/:33:33:/:1000:1000:/' -e 's/:33/:1000/' /etc/passwd \
 RUN sed -i -e 's|ErrorLog ${APACHE_LOG_DIR}/error.log|ErrorLog /data/log/mapuche-error.log|' \
            -e 's|CustomLog ${APACHE_LOG_DIR}/access.log combined|CustomLog /data/log/mapuche-access.log combined|' \
            /etc/apache2/sites-available/000-default.conf
+
+# Asegurar que los logs de Apache estén accesibles y no redirigidos a stdout/stderr
+RUN echo "ErrorLog /data/log/mapuche-error.log" >> /etc/apache2/apache2.conf && \
+    echo "CustomLog /data/log/mapuche-access.log combined" >> /etc/apache2/apache2.conf
 
 # Copiar y dar permisos al script de entrada
 COPY start.sh /entrypoint-dir/start.sh
