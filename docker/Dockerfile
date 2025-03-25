@@ -19,6 +19,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && docker-php-ext-enable xsl dbase \
     && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && apt-get install -y \
+    fonts-dejavu \
+    fonts-liberation \
+    locales \
+    && echo "es_AR.UTF-8 UTF-8" >> /etc/locale.gen \
+    && echo "es_ES.UTF-8 UTF-8" >> /etc/locale.gen \
+    && locale-gen \
+    && echo "default_charset = UTF-8" >> /usr/local/etc/php/conf.d/docker-php-utf8.ini
+
+
 # Instalar Node.js y Yarn usando Corepack
 RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
