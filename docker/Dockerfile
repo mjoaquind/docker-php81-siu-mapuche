@@ -23,10 +23,11 @@ RUN apt-get update && apt-get install -y \
     fonts-dejavu \
     fonts-liberation \
     locales \
-    && echo "es_AR.UTF-8 UTF-8" >> /etc/locale.gen \
-    && echo "es_ES.UTF-8 UTF-8" >> /etc/locale.gen \
+    && echo "es_AR ISO-8859-1" >> /etc/locale.gen \
+    && echo "es_ES ISO-8859-1" >> /etc/locale.gen \
     && locale-gen \
-    && echo "default_charset = UTF-8" >> /usr/local/etc/php/conf.d/docker-php-utf8.ini
+    && update-locale LANG=es_ES.ISO-8859-1 \
+    && echo "default_charset = ISO-8859-1" > /usr/local/etc/php/conf.d/docker-php-charset.ini
 
 
 # Instalar Node.js y Yarn usando Corepack
