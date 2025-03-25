@@ -1,5 +1,9 @@
 FROM php:8.1-apache
 
+# Establecer la zona horaria a Buenos Aires
+ENV TZ=America/Argentina/Buenos_Aires
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 # Habilitar mod_rewrite
 RUN a2enmod rewrite
 
